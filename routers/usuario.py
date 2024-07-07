@@ -20,6 +20,7 @@ class UserValidationResponse(BaseModel):
 def validate(request: UserValidationRequest):
     retCode, retTxt = Usuario.validar_usuario(request.usuario, request.pwd)
 
+
     if retCode < 0:
         raise HTTPException(status_code=400, detail=retTxt)
     elif retCode > 1:

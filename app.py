@@ -4,11 +4,12 @@ from pydantic import BaseModel, EmailStr
 #from typing import Dict, Any
 
 
-app = FastAPI()
+app = FastAPI(title="API del Gestor de Madre",
+              description="Blablabla que nunca se lee")
 
 # Incluimos el router
-app.include_router(usuario.router, prefix="/")
-
+from routers import usuario
+app.include_router(usuario.router)
 
 class LoginData(BaseModel):
     email: EmailStr
