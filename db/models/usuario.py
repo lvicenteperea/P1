@@ -1,4 +1,6 @@
 from pydantic import BaseModel, EmailStr
+import mysql.connector
+import config as settings
 
 class Usuario(BaseModel):
     nombre: str
@@ -53,3 +55,31 @@ class Usuario(BaseModel):
     def nombre_completo_capital(self) -> str:
         nombre_completo = f"{self.nombre} {self.apellido1} {self.apellido2}"
         return nombre_completo.title()
+
+    @staticmethod
+    def validar_usuario(usuario: str, pwd: str):
+        db_config = {
+            'user': settings.DB_USER,
+            'password': settings.DB_PASSWORD,
+            'host': settings.DB_HOST,
+            'database': settings.DB_NAME,
+        }
+
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        retCode = 0
+        retTxt = ""
+
+        try:
+            cursor.callproc('valida_usuario', [retCode, retTxt, usuario, pwd])
+            for result in cursor.stored_results():
+                retCode, retTxt = result.fetchone()
+
+            return retCode, retTxt
+        
+        except mysql.connector.Error as err:
+            return -1, str(err)
+        finally:
+            cursor.close()
+            connection.close()
