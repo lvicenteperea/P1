@@ -35,9 +35,13 @@ class MySQLDatabase(Database):
                 for result in cursor.stored_results():
                     results.append(result.fetchall())
                 connection.commit()
+                print(results)
+                input("estos han sido los resultado.... pulsa ENTER")
                 return results
+            
             except Error as e:
                 print(f"Error al llamar al procedimiento {procedure_name}: {e}")
+
             finally:
                 cursor.close()
                 connection.close()

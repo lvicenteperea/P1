@@ -1,7 +1,5 @@
-
-
 # Configuración de la conexión a la base de datos
-USER =  'tu_usuario'
-PWD = 'tu_contraseña'
+USER =  'root'
+PWD = 'admin'
 HOST = 'localhost'
-DATABASE = 'tu_base_de_datos'
+DATABASE = 'prueba'
