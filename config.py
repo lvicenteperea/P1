@@ -3,3 +3,12 @@ USER =  'root'
 PWD = 'admin'
 HOST = 'localhost'
 DATABASE = 'prueba'
+
+
+
+DB_CONFIG = {
+            'user': 'root',
+            'password': 'admin',
+            'host': 'localhost',
+            'database': 'prueba',
+        }

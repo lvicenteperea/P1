@@ -1,6 +1,6 @@
 from pydantic import BaseModel  #, EmailStr
 from typing import Union
-import db.db as db
+import mysql.connector
 import config as settings
 from errors.error import UserValidationResponse
 
@@ -90,19 +90,26 @@ class Usuario(BaseModel):
 class Usuarios(BaseModel):
     @staticmethod
     def validar_usuario(usuario: str, pwd: str) -> Union[UserValidationResponse, Usuario]:
+        db_config = {
+            'user': settings.USER,
+            'password': settings.PWD,
+            'host': settings.HOST,
+            'database': settings.DATABASE,
+        }
+
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        retCode = 0
+        retTxt = ""
+        apel1 = None
+        apel2 = None
+        email = None
+        telefono = None
 
         try:
-            mi_db = db.DatabaseFactory.get_database('mysql', **settings.DB_CONFIG)
-
-            retCode = 0
-            retTxt = ""
-            apel1 = None
-            apel2 = None
-            email = None
-            telefono = None
-
-            out_params = mi_db.call_procedure('valida_usuario', [retCode, retTxt, usuario, pwd, apel1, apel2, email, telefono])
-            # print(type(out_params))
+            out_params = cursor.callproc('valida_usuario', [retCode, retTxt, usuario, pwd, apel1, apel2, email, telefono])
+            
             # Asignar los valores de salida a las variables
             retCode = out_params[0]
             retTxt = out_params[1]
@@ -111,8 +118,16 @@ class Usuarios(BaseModel):
             email = out_params[6]
             telefono = out_params[7]
 
+            #return Usuario({"nombre":usuario, "apellido1":apel1, "apellido2":apel2, "email":email, "pwd":pwd, "telefono":telefono})
             return Usuario(usuario, apel1, apel2, email, pwd, telefono)
          
+        except mysql.connector.Error as err:
+            return UserValidationResponse(retCode=-1, retTxt=str(err))
         except Exception as err:
             return UserValidationResponse(retCode=-1, retTxt=str(err))
+        
+        finally:
+            cursor.close()
+            connection.close()
+
             

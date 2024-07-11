@@ -1,7 +1,7 @@
 import cx_Oracle
 from .db import Database
 from .models.usuario import Usuario
-from .schemas.usuario import cursor_a_lista_de_dict, dict_a_usuario
+from .schemas.usuario import cursor_a_lista_de_dict, dict_a_usuario, usuario_a_dict  # Asegúrate de que usuario_a_dict está definida
 
 class OracleDatabase(Database):
     def __init__(self, dsn, user, password):
@@ -30,7 +30,7 @@ class OracleDatabase(Database):
                 results = []
                 for result in cursor:
                     results.append(result.fetchall())
-                connection.commit()
+                # No es necesario hacer commit aquí a menos que sea una transacción
                 return results
             except cx_Oracle.Error as e:
                 print(f"Error al llamar al procedimiento {procedure_name}: {e}")

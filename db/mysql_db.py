@@ -1,8 +1,11 @@
 import mysql.connector
 from mysql.connector import Error
+from errors.error import UserValidationResponse
 from .db import Database
 from .models.usuario import Usuario
-from .schemas.usuario import cursor_a_lista_de_dict, dict_a_usuario
+from .schemas.usuario import cursor_a_lista_de_dict, dict_a_usuario, usuario_a_dict  # Asegúrate de que usuario_a_dict está definida
+
+
 
 class MySQLDatabase(Database):
     def __init__(self, host, database, user, password):
@@ -21,8 +24,10 @@ class MySQLDatabase(Database):
             )
             if connection.is_connected():
                 return connection
+
         except Error as e:
-            print(f"Error al conectar a MySQL: {e}")
+            return UserValidationResponse(retCode=-1, retTxt=f"Error al conectar a MySQL: {e}")
+
         return None
 
     def call_procedure(self, procedure_name, *args):
@@ -30,21 +35,24 @@ class MySQLDatabase(Database):
         if connection:
             cursor = connection.cursor()
             try:
-                cursor.callproc(procedure_name, args)
+                args_list = args[0]
+                results = cursor.callproc(procedure_name, args_list)
+                '''
+                esto imagino que será para cuando retorna un cursor, si es por parámetros lo que recorna en results es <class 'tuple'>
                 results = []
                 for result in cursor.stored_results():
                     results.append(result.fetchall())
+                '''
                 connection.commit()
-                print(results)
-                input("estos han sido los resultado.... pulsa ENTER")
                 return results
             
             except Error as e:
-                print(f"Error al llamar al procedimiento {procedure_name}: {e}")
+                return UserValidationResponse(retCode=-1, retTxt=f"Error al llamar al procedimiento {procedure_name}: {e}")
 
             finally:
                 cursor.close()
                 connection.close()
+
         return None
 
     def validate_user(self, email, pwd):
