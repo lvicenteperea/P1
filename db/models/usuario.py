@@ -2,7 +2,7 @@ from pydantic import BaseModel  #, EmailStr
 from typing import Union
 import db.db as db
 import config as settings
-from errors.error import UserValidationResponse
+from errores.error import UserValidationResponse
 
 
 class Usuario(BaseModel):
@@ -40,6 +40,9 @@ class Usuario(BaseModel):
         # set_pwd(self.pwd)
         # set_telefono(self.telefono)
     '''
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido1} {self.apellido2}\n{self.email}\n{self.pwd}\n{self.telefono}"
 
     # Getters
     def get_nombre(self) -> str:
@@ -82,7 +85,7 @@ class Usuario(BaseModel):
     # Método para obtener el nombre completo en letra capital
     def nombre_completo_capital(self) -> str:
         nombre_completo = f"{self.nombre} {self.apellido1} {self.apellido2}"
-        return nombre_completo.title()
+        return nombre_completo.capitalize()
 
 # -----------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------
@@ -111,7 +114,10 @@ class Usuarios(BaseModel):
             email = out_params[6]
             telefono = out_params[7]
 
-            return Usuario(usuario, apel1, apel2, email, pwd, telefono)
+            if retCode != 0:
+                return UserValidationResponse(retCode=retCode, retTxt=retTxt)
+            else:
+                return Usuario(usuario, apel1, apel2, email, pwd, telefono)
          
         except Exception as err:
             return UserValidationResponse(retCode=-1, retTxt=str(err))

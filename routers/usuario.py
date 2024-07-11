@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import Union
 from pydantic import BaseModel
 from db.models.usuario import Usuario, Usuarios
-from errors.error import UserValidationResponse
+from errores.error import UserValidationResponse
 
 # Definimos el router
 router = APIRouter(prefix="/user", tags=["users"])
@@ -29,8 +29,10 @@ def validate(usuario: str = Query(...), pwd: str = Query(...)):
 
     if isinstance(result, UserValidationResponse):
         if result.retCode < 0:
-            raise HTTPException(status_code=400, detail=result.retTxt)
-        elif result.retCode > 1:
-            raise HTTPException(status_code=500, detail="Unexpected error occurred")
+            # return HTTPException(status_code=400, detail=result.retTxt)
+            return UserValidationResponse(retCode=400, retTxt=result.retTxt)
+        elif result.retCode > 0:
+            # return HTTPException(status_code=500, detail=result.retTxt)
+            return UserValidationResponse(retCode=500, retTxt=result.retTxt)
 
     return result
