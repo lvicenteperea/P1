@@ -97,6 +97,43 @@ class Usuarios(BaseModel):
         try:
             mi_db = db.DatabaseFactory.get_database('mysql', **settings.DB_CONFIG)
 
+            '''
+            # Definir las variables iniciales
+            retCode = 0
+            retTxt = ""
+            usuario = None
+            pwd = None
+            apel1 = None
+            apel2 = None
+            email = None
+            telefono = None
+
+            # Crear la tupla de parámetros
+            out_params = [retCode, retTxt, usuario, pwd, apel1, apel2, email, telefono]
+
+            # Código adicional que modifica out_params de alguna manera
+            # out_params = mi_db.call_procedure('valida_usuario', out_params)
+
+            # Lista de nombres de las variables
+            var_names = ['retCode', 'retTxt', 'usuario', 'pwd', 'apel1', 'apel2', 'email', 'telefono']
+
+            # Asignar los valores de la tupla a las variables dinámicamente
+            for i, var_name in enumerate(var_names):
+                locals()[var_name] = out_params[i]
+
+            # Verificar los valores asignados
+            print(retCode)
+            print(retTxt)
+            print(usuario)
+            print(pwd)
+            print(apel1)
+            print(apel2)
+            print(email)
+            print(telefono)
+
+            '''
+
+
             retCode = 0
             retTxt = ""
             apel1 = None
