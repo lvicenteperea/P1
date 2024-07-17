@@ -93,7 +93,7 @@ class Usuario(BaseModel):
 class Usuarios(BaseModel):
     @staticmethod
     def validar_usuario(usuario: str, pwd: str) -> Union[UserValidationResponse, Usuario]:
-
+        mitxtCtr = 'Inicio'
         try:
             mi_db = db.DatabaseFactory.get_database('mysql', **settings.DB_CONFIG)
 
@@ -134,6 +134,7 @@ class Usuarios(BaseModel):
             '''
 
 
+            mitxtCtr = 'Asigno Var'
             retCode = 0
             retTxt = ""
             apel1 = None
@@ -141,9 +142,11 @@ class Usuarios(BaseModel):
             email = None
             telefono = None
 
+            mitxtCtr = 'llama a CallProc'
             out_params = mi_db.call_procedure('valida_usuario', [retCode, retTxt, usuario, pwd, apel1, apel2, email, telefono])
             # print(type(out_params))
             # Asignar los valores de salida a las variables
+            mitxtCtr = 'Asgina'
             retCode = out_params[0]
             retTxt = out_params[1]
             apel1 = out_params[4]
@@ -152,10 +155,12 @@ class Usuarios(BaseModel):
             telefono = out_params[7]
 
             if retCode != 0:
+                mitxtCtr = 'return Ko'
                 return UserValidationResponse(retCode=retCode, retTxt=retTxt)
             else:
+                mitxtCtr = 'return Ok'
                 return Usuario(usuario, apel1, apel2, email, pwd, telefono)
          
         except Exception as err:
-            return UserValidationResponse(retCode=-1, retTxt=str(err))
+            return UserValidationResponse(retCode=-1, retTxt=f"({mitxtCtr}): {str(err)}", retTxt2="esta es otra")
             

@@ -1,0 +1,4 @@
+{"fecha": "2024-07-17 19:04:11", "retCode": -1, "retTxt": "Error al conectar a MySQL: 1045 (28000): Access denied for user 'test'@'localhost' (using password: YES)"}
+{"fecha": "2024-07-17 19:04:11", "retCode": -1, "retTxt": "(llama a CallProc): 'UserValidationResponse' object has no attribute 'cursor'", "retTxt2": "esta es otra"}
+{"fecha": "2024-07-17 19:07:11", "retCode": -1, "retTxt": "Error al llamar al procedimiento valida_usua rio: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'rio_arg1=0,@_valida_usua rio_arg2='',@_valida_usua rio_arg3='Usuawwrio',@_valida' at line 1", "caller_method": "call_procedure"}
+{"fecha": "2024-07-17 19:07:11", "retCode": -1, "retTxt": "(Asgina): 'UserValidationResponse' object is not subscriptable", "caller_method": "validar_usuario", "retTxt2": "esta es otra"}

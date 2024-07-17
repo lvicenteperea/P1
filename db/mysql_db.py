@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from errores.error import UserValidationResponse
 from .db import Database
-from .models.usuario import Usuario
+# from .models.usuario import Usuario
 from .schemas.usuario import cursor_a_lista_de_dict, dict_a_usuario, usuario_a_dict  # Asegúrate de que usuario_a_dict está definida
 
 
